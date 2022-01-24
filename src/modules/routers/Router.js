@@ -6,17 +6,17 @@
 class Router
 {
 	/**
-	 * @var Array of command-line arguments
+	 * Array of command-line arguments
 	 */
 	args = [];
 
 	/**
-	 * @var Puppeteer page instance
+	 * Puppeteer page instance
 	 */
 	page = null;
 
 	/**
-	 * @var Router type string
+	 * Router type string
 	 */
 	type = "";
 

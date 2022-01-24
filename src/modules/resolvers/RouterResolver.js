@@ -8,14 +8,14 @@ import { RouterArris } from '../routers/RouterArris.js';
 class RouterResolver
 {
 	/**
-	 * @var Array of command-line arguments
+	 * Array of command-line arguments
 	 */
-	args = [];
+	#args = [];
 
 	/**
-	 * @var The Puppeteer page instance
+	 * The Puppeteer page instance
 	 */
-	page = null;
+	#page = null;
 
 	/**
 	 * Constructs a new RouterResolver instance with the specified command-line
@@ -25,8 +25,8 @@ class RouterResolver
 	 * @param page The Puppeteer page instance
 	 */
 	constructor(args, page) {
-		this.args = args;
-		this.page = page;
+		this.#args = args;
+		this.#page = page;
 	}
 
 	/**
@@ -36,8 +36,8 @@ class RouterResolver
 	 * @return Router
 	 */
 	async resolve() {
-		if(this.isArris()) {
-			return new RouterArris(this.args, this.page);
+		if(this.#isArris()) {
+			return new RouterArris(this.#args, this.#page);
 		}
 		return null;
 	}
@@ -47,27 +47,27 @@ class RouterResolver
 	 *
 	 * @return bool
 	 */
-	isArris() {
+	#isArris() {
 		let fingerprints = [];
 		let returnVal = false;
 
 		// check the <head> section for the 'ARRIS Group, Inc' string
 		fingerprints.push(
-			await this.page.$eval('head', headElement => {
+			await this.#page.$eval('head', headElement => {
 				return headElement.innerHTML.indexOf('ARRIS Group, Inc') != -1;
 			})
 		);
 
 		// check the <script> section(s) for the ' ARRIS ' string
 		fingerprints.push(
-			await this.page.$$eval('script', scriptElements => {
+			await this.#page.$$eval('script', scriptElements => {
 				return scriptElements.filter(el => {
 					return el.innerText.indexOf(' ARRIS ') != -1;
 				});
 			})
 		);
 
-		return this.checkFingerprints(fingerprints);
+		return this.#checkFingerprints(fingerprints);
 	}
 
 	/**
@@ -77,7 +77,7 @@ class RouterResolver
 	 * @param fingerprints Array of fingerprint returns
 	 * @return bool
 	 */
-	checkFingerprints(fingerprints) {
+	#checkFingerprints(fingerprints) {
 		// iterate over our returns from the evaluations and figure out if
 		// we have anything that fingerprinted the router
 		let returnVal = false;
