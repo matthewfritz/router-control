@@ -55,7 +55,7 @@ class OperationTimer
 	executeInterval() {
 		this.#elapsed += $this.#interval;
 		if(this.#showProgress) {
-			console.log("* Elapsed time for operation " + this.#name + ": " + this.#formatInterval(this.#elapsed));
+			console.log("* Elapsed time for operation " + this.#name + ": " + OperationTimer.formatInterval(this.#elapsed));
 		}
 	}
 
@@ -65,7 +65,7 @@ class OperationTimer
 	 * @param milliseconds The number of milliseconds to format
 	 * @return string
 	 */
-	#formatInterval(milliseconds) {
+	static formatInterval(milliseconds) {
 		let elapsedHour = 0;
 		let elapsedMin = 0;
 		let elapsedSec = 0;
@@ -173,7 +173,7 @@ class OperationTimer
 
 			// calculate and output the elapsed time for the operation
 			this.#elapsed = this.#stopTime - this.#startTime;
-			console.log("* Total time for operation " + this.#name + ": " + this.#formatInterval(this.#elapsed));
+			console.log("* Total time for operation " + this.#name + ": " + OperationTimer.formatInterval(this.#elapsed));
 
 			console.log("* Stopped operation timer for " + this.#name + ".");
 		}
