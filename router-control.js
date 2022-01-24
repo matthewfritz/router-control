@@ -1,3 +1,5 @@
+import { RouterResolver } from './src/modules/resolvers/RouterResolver.js';
+
 const puppeteer = require('puppeteer');
 const config = require('dotenv').config();
 

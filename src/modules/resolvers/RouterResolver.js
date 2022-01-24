@@ -1,7 +1,9 @@
+import { RouterArris } from '../routers/RouterArris.js';
+
 /**
- * @name RouterResolver
- *
  * Handles the resolution of the router type.
+ *
+ * @author Matthew Fritz <mattf@burbankparanormal.com>
  */
 class RouterResolver
 {
@@ -60,7 +62,7 @@ class RouterResolver
 		fingerprints.push(
 			await this.page.$$eval('script', scriptElements => {
 				return scriptElements.filter(el => {
-					return el.innerText.indexOf(" ARRIS ") != -1;
+					return el.innerText.indexOf(' ARRIS ') != -1;
 				});
 			})
 		);
@@ -85,3 +87,5 @@ class RouterResolver
 		return returnVal;
 	}
 }
+
+export { RouterResolver };

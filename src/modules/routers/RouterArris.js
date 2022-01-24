@@ -1,7 +1,9 @@
+import { Router } from './Router.js';
+
 /**
- * @name RouterArris
- *
  * Handles operations specific to ARRIS routers.
+ *
+ * @author Matthew Fritz <mattf@burbankparanormal.com>
  */
 class RouterArris extends Router
 {
@@ -23,6 +25,9 @@ class RouterArris extends Router
 	 */
 	async process(username, password) {
 		super.process(username, password);
+
 		// process the ARRIS command(s)
 	}
 }
+
+export { RouterArris };

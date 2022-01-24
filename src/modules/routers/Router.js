@@ -1,7 +1,7 @@
 /**
- * @name Router
- *
  * General class for router implementations.
+ *
+ * @author Matthew Fritz <mattf@burbankparanormal.com>
  */
 class Router
 {
@@ -44,3 +44,5 @@ class Router
 		console.log("");
 	}
 }
+
+export { Router };
