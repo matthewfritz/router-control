@@ -6,6 +6,11 @@
 class RouterResolver
 {
 	/**
+	 * @var Array of command-line arguments
+	 */
+	args = [];
+
+	/**
 	 * @var The Puppeteer page instance
 	 */
 	page = null;
@@ -41,6 +46,42 @@ class RouterResolver
 	 * @return bool
 	 */
 	isArris() {
-		
+		let fingerprints = [];
+		let returnVal = false;
+
+		// check the <head> section for the 'ARRIS Group, Inc' string
+		fingerprints.push(
+			await this.page.$eval('head', headElement => {
+				return headElement.innerHTML.indexOf('ARRIS Group, Inc') != -1;
+			})
+		);
+
+		// check the <script> section(s) for the ' ARRIS ' string
+		fingerprints.push(
+			await this.page.$$eval('script', scriptElements => {
+				return scriptElements.filter(el => {
+					return el.innerText.indexOf(" ARRIS ") != -1;
+				});
+			})
+		);
+
+		return this.checkFingerprints(fingerprints);
+	}
+
+	/**
+	 * Returns whether the array of fingerprint returns to see whether at least
+	 * one fingerprint resulted in a match.
+	 *
+	 * @param fingerprints Array of fingerprint returns
+	 * @return bool
+	 */
+	checkFingerprints(fingerprints) {
+		// iterate over our returns from the evaluations and figure out if
+		// we have anything that fingerprinted the router
+		let returnVal = false;
+		for(const fp of fingerprints) {
+			returnVal = returnVal || fp;
+		}
+		return returnVal;
 	}
 }

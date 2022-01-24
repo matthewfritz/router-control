@@ -40,6 +40,7 @@ class Router
 	 * @param password The password for auth
 	 */
 	async process(username, password) {
-		console.log("This general process() method should be overridden in the child class but it isn't.");
+		console.log("Processing operation(s) for " + this.type + " router...");
+		console.log("");
 	}
 }

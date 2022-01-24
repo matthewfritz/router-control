@@ -22,6 +22,7 @@ class RouterArris extends Router
 	 * @param password The password for auth
 	 */
 	async process(username, password) {
+		super.process(username, password);
 		// process the ARRIS command(s)
 	}
 }
