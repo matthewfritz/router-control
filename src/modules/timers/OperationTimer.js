@@ -13,7 +13,7 @@ class OperationTimer
 	/**
 	 * Delay for each interval in milliseconds
 	 */
-	#interval = 30000;
+	#interval = 15000;
 
 	/**
 	 * Name of the operation that is executing
@@ -66,9 +66,16 @@ class OperationTimer
 	 * @return string
 	 */
 	#formatInterval(milliseconds) {
+		let elapsedHour = 0;
 		let elapsedMin = 0;
 		let elapsedSec = 0;
 		let elapsedMillis = 0;
+
+		// calculate the number of hours
+		while(milliseconds >= 3600000) {
+			elapsedHour++;
+			milliseconds -= 3600000;
+		}
 
 		// calculate the number of minutes
 		while(milliseconds >= 60000) {
@@ -87,6 +94,9 @@ class OperationTimer
 
 		// format the individual pieces and then create a delimited string
 		let formattedPieces = [];
+		if(elapsedHour > 0) {
+			formattedPieces.push((elapsedHour == 1) ? elapsedHour + " hour" : elapsedHour + " hours");
+		}
 		if(elapsedMin > 0) {
 			formattedPieces.push((elapsedMin == 1) ? elapsedMin + " minute" : elapsedMin + " minutes");
 		}
@@ -110,10 +120,10 @@ class OperationTimer
 	}
 
 	/**
-	 * Resets the interval delay to the default of 30 seconds.
+	 * Resets the interval delay to the default of 15 seconds.
 	 */
 	resetIntervalDelay() {
-		this.setIntervalDelay(30000);
+		this.setIntervalDelay(15000);
 	}
 
 	/**
