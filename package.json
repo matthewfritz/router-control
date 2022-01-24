@@ -1,0 +1,28 @@
+{
+  "name": "router-control",
+  "version": "1.0.0",
+  "description": "NodeJS tool to automate certain tasks on my router.",
+  "main": "router-control.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthewfritz/router-control.git"
+  },
+  "keywords": [
+    "router",
+    "control",
+    "automation"
+  ],
+  "author": "Matthew Fritz <mattf@burbankparanormal.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/matthewfritz/router-control/issues"
+  },
+  "homepage": "https://github.com/matthewfritz/router-control#readme",
+  "dependencies": {
+    "dotenv": "^14.2.0",
+    "puppeteer": "^13.1.1"
+  }
+}
