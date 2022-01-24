@@ -39,10 +39,10 @@ class Router
 	 * @param username The username for auth
 	 * @param password The password for auth
 	 */
-	async process(username, password) {
+	process(username, password) {
 		console.log("Processing operation(s) for " + this.type + " router...");
 		console.log("");
 	}
 }
 
-export { Router };
+module.exports = { Router };

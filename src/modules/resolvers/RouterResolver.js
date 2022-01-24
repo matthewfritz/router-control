@@ -1,4 +1,5 @@
-import { RouterArris } from '../routers/RouterArris.js';
+//import { RouterArris } from '../routers/arris/RouterArris.js';
+const { RouterArris } = require('../routers/arris/RouterArris.js');
 
 /**
  * Handles the resolution of the router type.
@@ -35,7 +36,7 @@ class RouterResolver
 	 *
 	 * @return Router
 	 */
-	async resolve() {
+	resolve() {
 		if(this.#isArris()) {
 			return new RouterArris(this.#args, this.#page);
 		}
@@ -47,26 +48,26 @@ class RouterResolver
 	 *
 	 * @return bool
 	 */
-	#isArris() {
+	async #isArris() {
 		let fingerprints = [];
-		let returnVal = false;
 
 		// check the <head> section for the 'ARRIS Group, Inc' string
+		let stuff = await this.#page.$eval('head', headElement => headElement.innerHTML);
+		console.log(stuff);
 		fingerprints.push(
-			await this.#page.$eval('head', headElement => {
-				return headElement.innerHTML.indexOf('ARRIS Group, Inc') != -1;
-			})
+			
 		);
 
 		// check the <script> section(s) for the ' ARRIS ' string
-		fingerprints.push(
-			await this.#page.$$eval('script', scriptElements => {
+		/*fingerprints.push(
+			this.#page.$$eval('script', scriptElements => {
 				return scriptElements.filter(el => {
 					return el.innerText.indexOf(' ARRIS ') != -1;
 				});
 			})
-		);
+		);*/
 
+		console.log(fingerprints);
 		return this.#checkFingerprints(fingerprints);
 	}
 
@@ -88,4 +89,4 @@ class RouterResolver
 	}
 }
 
-export { RouterResolver };
+module.exports = { RouterResolver };

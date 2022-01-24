@@ -1,5 +1,5 @@
-import { OperationTimer } from '../timers/OperationTimer.js';
-import { Router } from './Router.js';
+const { OperationTimer } = require('../../timers/OperationTimer.js');
+const { Router } = require('../Router.js');
 
 /**
  * Handles operations specific to ARRIS routers.
@@ -24,11 +24,11 @@ class RouterArris extends Router
 	 * @param username The username for auth
 	 * @param password The password for auth
 	 */
-	async process(username, password) {
+	process(username, password) {
 		super.process(username, password);
 
 		// process the ARRIS command(s)
 	}
 }
 
-export { RouterArris };
+module.exports = { RouterArris };

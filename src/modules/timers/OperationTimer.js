@@ -173,7 +173,7 @@ class OperationTimer
 
 			// calculate and output the elapsed time for the operation
 			this.#elapsed = this.#stopTime - this.#startTime;
-			console.log("* Total time for operation " + this.#name + ": " + OperationTimer.formatInterval(this.#elapsed));
+			console.log("* Total time elapsed for operation " + this.#name + ": " + OperationTimer.formatInterval(this.#elapsed));
 
 			console.log("* Stopped operation timer for " + this.#name + ".");
 		}
@@ -184,4 +184,4 @@ class OperationTimer
 	}
 }
 
-export { OperationTimer };
+module.exports = { OperationTimer };
