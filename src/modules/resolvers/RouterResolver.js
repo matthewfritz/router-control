@@ -36,8 +36,9 @@ class RouterResolver
 	 *
 	 * @return Router
 	 */
-	resolve() {
-		if(this.#isArris()) {
+	async resolve() {
+		let isArris = await this.#isArris();
+		if(isArris) {
 			return new RouterArris(this.#args, this.#page);
 		}
 		return null;
@@ -52,22 +53,17 @@ class RouterResolver
 		let fingerprints = [];
 
 		// check the <head> section for the 'ARRIS Group, Inc' string
-		let stuff = await this.#page.$eval('head', headElement => headElement.innerHTML);
-		console.log(stuff);
-		fingerprints.push(
-			
-		);
+		const headContent = await this.#page.$eval('head', (el) => el.innerHTML);
+		fingerprints.push(headContent.indexOf('ARRIS Group, Inc') != -1);
 
 		// check the <script> section(s) for the ' ARRIS ' string
-		/*fingerprints.push(
-			this.#page.$$eval('script', scriptElements => {
-				return scriptElements.filter(el => {
-					return el.innerText.indexOf(' ARRIS ') != -1;
-				});
-			})
-		);*/
+		const scriptTags = await this.#page.$$eval('script', (scripts) =>
+			scripts.map((script) => script.textContent)
+		);
+		fingerprints.push(scriptTags.filter(function(script) {
+			return script.indexOf(' ARRIS ') != -1;
+		}).length > 0);
 
-		console.log(fingerprints);
 		return this.#checkFingerprints(fingerprints);
 	}
 

@@ -18,7 +18,7 @@ if(args.length > 0) {
 
 		// figure out what kind of router we are dealing with and then process
 		// the desired command(s)
-		const router = new RouterResolver(args, page).resolve(page);
+		const router = await new RouterResolver(args, page).resolve(page);
 		if(router != null) {
 			console.log("Resolved router type: " + router.type);
 			router.process(process.env.ROUTER_USERNAME, process.env.ROUTER_PASSWORD);
