@@ -8,22 +8,22 @@ class OperationTimer
 	/**
 	 * Total estimated elapsed interval time in milliseconds
 	 */
-	#elapsed = 0;
+	elapsed = 0;
 
 	/**
 	 * Delay for each interval in milliseconds
 	 */
-	#interval = 15000;
+	interval = 15000;
 
 	/**
 	 * Name of the operation that is executing
 	 */
-	#name = "";
+	name = "";
 
 	/**
 	 * Whether to output progress updates during each interval
 	 */
-	#showProgress = true;
+	showProgress = true;
 
 	/**
 	 * Time in milliseconds when the operation began
@@ -46,16 +46,18 @@ class OperationTimer
 	 * @param name The name of the operation that is running
 	 */
 	constructor(name) {
-		this.#name = name;
+		this.name = name;
 	}
 
 	/**
 	 * Processes the interval.
+	 *
+	 * @param OperationTimer timer The timer instance
 	 */
-	executeInterval() {
-		this.#elapsed += $this.#interval;
-		if(this.#showProgress) {
-			console.log("* Elapsed time for operation " + this.#name + ": " + OperationTimer.formatInterval(this.#elapsed));
+	executeInterval(timer) {
+		timer.elapsed += timer.interval;
+		if(timer.showProgress) {
+			console.log("* Elapsed time for operation " + timer.name + ": " + OperationTimer.formatInterval(timer.elapsed));
 		}
 	}
 
@@ -116,7 +118,7 @@ class OperationTimer
 	 * @return int
 	 */
 	getIntervalDelay() {
-		return this.#interval;
+		return this.interval;
 	}
 
 	/**
@@ -132,7 +134,7 @@ class OperationTimer
 	 * @param delay The delay in milliseconds
 	 */
 	setIntervalDelay(delay) {
-		this.#interval = delay;
+		this.interval = delay;
 	}
 
 	/**
@@ -141,7 +143,7 @@ class OperationTimer
 	 * @param showProgress True to show updates, false otherwise
 	 */
 	setShowProgress(showProgress) {
-		this.#showProgress = showProgress;
+		this.showProgress = showProgress;
 	}
 
 	/**
@@ -149,15 +151,15 @@ class OperationTimer
 	 */
 	async start() {
 		if(this.#timerHandle == null) {
-			console.log("* Starting operation timer for " + this.#name + "...");
-			this.#elapsed = 0;
+			console.log("* Starting operation timer for " + this.name + "...");
+			this.elapsed = 0;
 			this.#startTime = Date.now();
 			this.#stopTime = 0;
-			this.#timerHandle = setInterval(this.executeInterval, this.#interval);
+			this.#timerHandle = setInterval(this.executeInterval, this.interval, this);
 		}
 		else
 		{
-			console.log("Operation timer for " + this.#name + " is already running.");
+			console.log("Operation timer for " + this.name + " is already running.");
 		}
 	}
 
@@ -166,20 +168,20 @@ class OperationTimer
 	 */
 	async stop() {
 		if(this.#timerHandle != null) {
-			console.log("* Stopping operation timer for " + this.#name + "...");
+			console.log("* Stopping operation timer for " + this.name + "...");
 			clearInterval(this.#timerHandle);
 			this.#timerHandle = null;
 			this.#stopTime = Date.now();
 
 			// calculate and output the elapsed time for the operation
-			this.#elapsed = this.#stopTime - this.#startTime;
-			console.log("* Total time elapsed for operation " + this.#name + ": " + OperationTimer.formatInterval(this.#elapsed));
+			this.elapsed = this.#stopTime - this.#startTime;
+			console.log("* Total time elapsed for operation " + this.name + ": " + OperationTimer.formatInterval(this.elapsed));
 
-			console.log("* Stopped operation timer for " + this.#name + ".");
+			console.log("* Stopped operation timer for " + this.name + ".");
 		}
 		else
 		{
-			console.log("Operation timer for " + this.#name + " is not currently running.");
+			console.log("Operation timer for " + this.name + " is not currently running.");
 		}
 	}
 }

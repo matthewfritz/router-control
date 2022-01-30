@@ -54,6 +54,7 @@ class RouterArris extends Router
 			// wait for the "Basic Setup" <div> to appear since that will mean the
 			// authentication attempt was successful
 			await this.page.waitForSelector('div#BasicSetup');
+			this.page.removeAllListeners('dialog');
 			return true;
 		} catch (e) {
 			// page closed, something not found, timeout, etc.
@@ -62,23 +63,54 @@ class RouterArris extends Router
 		return false;
 	}
 
+	/**
+	 * Navigates to the "Restart Router" screen and presses the "Restart" button
+	 * to restart the router.
+	 */
 	async #restartRouter() {
-		console.log("Restarting the router...");
-
-		const pageUrl = this.page.url() + '?util_restart';
+		const restartTimer = new OperationTimer("restart_router");
+		const thePage = this.page;
+		const pageUrl = thePage.url() + '?util_restart';
 		console.log("Navigating to " + pageUrl + "...");
-		this.page.setDefaultTimeout(60000);
+		thePage.setDefaultTimeout(60000); // extend default timeout to one minute
 
 		const [response] = await Promise.all([
-			this.page.waitForNavigation(),
-			this.page.goto(pageUrl),
+			thePage.waitForNavigation(),
+			thePage.goto(pageUrl),
 		]);
 
-		await this.page.waitForSelector('input[value="Restart"]');
-		const tags = await this.page.$$eval('a', (tags) =>
-			tags.map((tag) => tag.innerHTML)
-		);
-		console.log(tags);
+		// wait for the "Restart" button to be added to the DOM
+		await thePage.waitForSelector('input[value="Restart"]');
+		thePage.setDefaultTimeout(300000); // 5 minutes since this operation can take a little while
+
+		// an alert dialog here would be the confirm dialog
+		thePage.on('dialog', async function(dialog) {
+			// apply the OK on the dialog to confirm the restart
+			await dialog.accept();
+			console.log("");
+			console.log("Successfully sent the restart signal to the router!");
+			console.log("Restarting the router (this may take a few minutes)...");
+
+			// start the timer
+			console.log("");
+			restartTimer.start();
+			console.log("");
+		});
+
+		// press the "Restart" button to restart the router, waiting for the
+		// network to become idle (since the heartbeat AJAX calls happen to
+		// check whether the router is ready)
+		const [restartResponse] = await Promise.all([
+			thePage.waitForNetworkIdle({idleTime: 10000}), // network activity needs to stop for 10 seconds
+			thePage.click('input[value="Restart"]'),
+		]);
+
+		// stop the timer
+		console.log("");
+		restartTimer.stop();
+
+		console.log("");
+		console.log("Successfully restarted the router!");
 	}
 
 	/**
@@ -99,7 +131,11 @@ class RouterArris extends Router
 			console.log("Authentication successful.");
 			console.log("");
 
-			await this.#restartRouter();
+			// check the arguments for the operations we will be performing
+			if(this.args.indexOf("--restart-router") != -1) {
+				// we will be restarting the router
+				await this.#restartRouter();
+			}
 		} else {
 			console.log("Authentication failed.");
 		}
