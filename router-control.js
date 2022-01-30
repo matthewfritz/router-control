@@ -21,16 +21,16 @@ if(args.length > 0) {
 		const router = await new RouterResolver(args, page).resolve(page);
 		if(router != null) {
 			console.log("Resolved router type: " + router.type);
-			router.process(process.env.ROUTER_USERNAME, process.env.ROUTER_PASSWORD);
+			await router.process(process.env.ROUTER_USERNAME, process.env.ROUTER_PASSWORD);
 		}
 		else
 		{
 			console.log("Could not resolve the router type. Exiting...");
 		}
 
-		// close the browser and echo a finished message
-		await page.close();
-		await browser.close();
+		// close the page and browser (ignoring any errors) and echo a finished message
+		await page.close().catch((e) => {});
+		await browser.close().catch((e) => {});
 		console.log("");
 		console.log("Done.");
 	})();
